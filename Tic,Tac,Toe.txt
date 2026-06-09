@@ -1,0 +1,85 @@
+#include <iostream>
+using namespace std;
+
+    // spot on the board
+    char ul = '1', um = '2' , ur = '3';
+    char ml = '4', mm = '5' , mr = '6';
+    char bl = '7', bm = '8', br = '9';
+    
+    int turn = 1;
+    int position; 
+    
+void printBoard(){
+    cout << ul << ' '  << um << ' ' << ur << endl;
+    cout << ml << ' ' << mm << ' ' << mr << endl;
+    cout << bl << ' ' << bm << ' ' << br << endl;
+
+}
+
+char whosTurn(){
+    if(turn %2==1) return 'X';
+    else return 'O';
+}
+
+bool isValid(){
+    return ((position == 1 && ul == '1')||
+           (position == 2 && um == '2') ||
+           (position == 3 && ur == '3') ||
+           (position == 4 && ml == '4') ||
+           (position == 5 && mm == '5') ||
+           (position == 6 && mr == '6') ||
+           (position == 7 && bl =='7') ||
+           (position == 8 && bm == '8') ||
+           (position == 9 && br == '9'));
+
+}
+
+void placeSymbol(char symbol){
+    if(position == 1) ul = symbol;
+    else if(position == 2) um = symbol;
+    else if(position == 3) ur = symbol;
+    else if(position == 4) ml = symbol;
+    else if(position == 5) mm = symbol;
+    else if(position == 6) mr = symbol;
+    else if(position == 7) bl = symbol;
+    else if(position == 8) bm = symbol;
+    else br = symbol;
+}
+
+bool isWinner(){
+    return((ul == um && um == ur) ||
+          (ml == mm && mm == mr) ||
+          (bl == bm && bm == br) ||
+          (ul == ml && ml == bl) ||
+          (um == mm && mm == bm) ||
+          (ur == mr && mr == br) ||
+          (ul == mm && mm == br) ||
+          (ur ==mm && mm == bl));
+    
+}
+
+int main(){
+    
+    printBoard();
+    while(turn <= 9){
+        char symbol = whosTurn(); // return x or y
+        cout << symbol << " 's turn: ";
+        cin >> position; // position from 1-9
+        while (!isValid()){ // error check
+            cout << "Invalid Try again: ";
+            cin >> position;
+        }
+        
+        placeSymbol(symbol);
+        printBoard();
+        if(isWinner()){
+            cout << symbol << " wins!\n";
+            return 0;
+        }
+        turn++;
+        
+    }
+    cout << "Tie! Game Over." << endl;
+
+    return 0;
+}

@@ -1,0 +1,94 @@
+#include <iostream>
+using namespace std;
+#include <ctime>
+
+int randomDigit(){
+    return rand()%10; //between 0-9
+}
+
+void setUp(bool a[][10], char b[][10]){
+    for (int r=0;r<=10;r++){
+        for(int c=0;c<=10;c++){
+            a[r][c] = false;
+        }
+    }
+    
+    for (int r=0;r<=10;r++){
+        for(int c=0;c<=10;c++){
+            b[r][c] = '?';
+        }
+    }
+}
+
+void generateShips( bool arr[][10], int ns){
+    int s = 0;
+    while(s<ns){
+        int r = randomDigit(), c = randomDigit();
+        
+        if(!arr[r][c]){
+            arr[r][c] = true;
+            s++;
+        }
+    }
+}
+
+void print(char arr[][10], int n){
+    cout << "There are " << n << " ships remaining. \n";
+    cout << "  ";//first row
+    for(int i=0; i<10; i++) cout << " " << i;
+    cout << endl;
+    
+    //second row 
+    cout << "  ";
+    for(int i=0; i<10; i++) cout << "--";
+    cout << endl;
+    
+    for(int i=0; i<10;i++){
+        cout << i << '|';
+        for(int j=0;j<10;j++){
+            cout << ' ' << arr[i][j]; // i =0, j from 0-9;
+        }
+        cout << endl;
+    }
+}
+
+void update(char board[][10],int ir,int ic, bool ships [][10], int& ns, int& na){
+    if (ir>9 || ir <0 || ic >9 || ic < 0){
+        cout << "Invalid spot. Out of range!" << endl;
+    } else if (board [ir][ic] != '?'){
+        cout << "Invalid spot. Spot is taken.\n";
+    } else if (ships[ir][ic]){
+        cout << "HIT!\n";
+        board[ir][ic] = 'X';
+        na++;
+        ns--;
+    } else{
+        cout << "MISS!\n";
+        board[ir][ic] = 'O';
+        na++;
+    }
+}
+
+int main(){
+    
+    srand(time(0));
+    bool ships[10][10];
+    char board[10][10];
+    int ns, na = 0;
+    int ir, ic;
+    
+    cout << "Enter the # of ships in game";
+    cin >> ns;
+    setUp(ships, board);
+    generateShips(ships,ns);
+    
+    while(ns > 0){
+        print(board,ns);
+        cout << "Enter attack positions [r c]: ";
+        cin >> ir >> ic;
+        update(board,ir,ic,ships,ns,na);
+    }
+    cout << "Game Over!\n" << "# of attacks: " << na << endl; 
+
+    return 0;
+}
